@@ -2,11 +2,12 @@ resource "aws_kms_key" "default_bucket" {
   count = local.create_dedicated_bucket ? 1 : 0
   description             = "This key is used to encrypt bucket objects"
   deletion_window_in_days = 10
+  tags = local.tags
 }
 
 resource "aws_s3_bucket" "default" {
   count = local.create_dedicated_bucket ? 1 : 0
-  bucket = var.unique_name
+  bucket_prefix = var.unique_name
   acl    = "private"
 
   versioning {

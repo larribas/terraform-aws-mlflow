@@ -1,7 +1,7 @@
 data "aws_region" "current" {}
 
 resource "aws_iam_role" "ecs_task" {
-  name_prefix = "${var.unique_name}-ecs-task"
+  name = "${var.unique_name}-ecs-task"
   tags        = local.tags
 
   assume_role_policy = jsonencode({
@@ -85,6 +85,7 @@ resource "aws_ecs_task_definition" "mlflow" {
         "--host=0.0.0.0",
         "--port=${local.service_port}",
         "--default-artifact-root=s3://${local.artifact_bucket_id}${var.artifact_bucket_path}",
+        "--backend-store-uri=mysql+pymysql://${aws_rds_cluster.backend_store.master_username}:${data.aws_secretsmanager_secret_version.db_password.secret_string}@${aws_rds_cluster.backend_store.endpoint}:${aws_rds_cluster.backend_store.port}/${aws_rds_cluster.backend_store.database_name}",
       ]
       portMappings = [{ containerPort = local.service_port }]
       secrets = []

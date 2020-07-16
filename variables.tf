@@ -13,6 +13,11 @@ variable "vpc_id" {
   description = "AWS VPC to deploy MLFlow into"
 }
 
+variable "db_subnet_ids" {
+  type = list(string)
+  description = "List of subnets where the RDS database will be deployed"
+}
+
 variable "mlflow_subnet_ids" {
   type = list(string)
   description = "List of subnets where the MLFlow ECS service will be deployed (the recommendation is to use subnets that cannot be accessed directly from the Internet)"
@@ -70,3 +75,7 @@ variable "artifact_bucket_path" {
   description = "The path within the bucket where MLFlow will store its artifacts"
 }
 
+variable "database_password_secret_name" {
+  type = string
+  description = "The name of the SecretManager secret that defines the database password. It needs to be created before calling the module"
+}
