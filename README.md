@@ -9,8 +9,8 @@
 - [ ] Default S3 bucket + IAM role + Documentation
 - [ ] RDS cluster + backend-store-uri + Documentation
 - [ ] Target-based autoscaling
-- [ ] Full example with a custom domain, ALB and S3 buckets
 - [ ] Allow injecting sidecar containers and inject a datadog agent
+- [ ] Full example with a custom domain, ALB and S3 buckets
 - [ ] Terratest and GitHub Actions
 - [ ] README
 - [ ] LICENSE
