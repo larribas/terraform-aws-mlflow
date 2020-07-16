@@ -1,14 +1,3 @@
-locals {
-  tags = merge(
-    {
-      "terraform-module" = "glovo/mlflow/aws"
-    },
-    var.tags
-  )
-
-  service_port = 80
-}
-
 data "aws_region" "current" {}
 
 resource "aws_iam_role" "ecs_task" {
@@ -95,6 +84,7 @@ resource "aws_ecs_task_definition" "mlflow" {
       command = [
         "--host=0.0.0.0",
         "--port=${local.service_port}",
+        "--default-artifact-root=s3://${local.artifact_bucket_id}${var.artifact_bucket_path}",
       ]
       portMappings = [{ containerPort = local.service_port }]
       secrets = []

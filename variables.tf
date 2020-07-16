@@ -57,3 +57,16 @@ variable "log_retention_in_days" {
   default = 90
   description = "The number of days to keep logs around"
 }
+
+variable "artifact_bucket_id" {
+  type = string
+  default = null
+  description = "If specified, MLFlow will use this bucket to store artifacts. Otherwise, this module will create a dedicated bucket. When overriding this value, you need to enable the task role to access the root you specified"
+}
+
+variable "artifact_bucket_path" {
+  type = string
+  default = "/"
+  description = "The path within the bucket where MLFlow will store its artifacts"
+}
+
