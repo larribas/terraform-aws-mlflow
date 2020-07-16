@@ -8,11 +8,11 @@
 - [x] Output info to hook it to an LB listener
 - [x] Default S3 bucket + IAM role + Documentation
 - [x] RDS cluster + backend-store-uri + Documentation
-- [ ] Full example with a custom domain, ALB and S3 buckets
-- [ ] Terratest and GitHub Actions
-- [ ] Terraform fmt and grooming
+- [x] Terraform fmt and grooming
 - [ ] README
 - [ ] LICENSE
+- [ ] Full example with a custom domain, ALB and S3 buckets
+- [ ] Terratest and GitHub Actions
 - [ ] PR to mlflow to accept BACKEND_STORE_URI as an environment variable => Allow selecting a different container image
 - [ ] Target-based autoscaling
 - [ ] Allow injecting sidecar containers and inject a datadog agent

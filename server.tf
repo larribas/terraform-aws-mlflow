@@ -2,7 +2,7 @@ data "aws_region" "current" {}
 
 resource "aws_iam_role" "ecs_task" {
   name = "${var.unique_name}-ecs-task"
-  tags        = local.tags
+  tags = local.tags
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -42,15 +42,15 @@ resource "aws_iam_role_policy_attachment" "ecs_execution" {
 }
 
 resource "aws_security_group" "ecs_service" {
-  name   = "${var.unique_name}-ecs-service"
-  tags   = local.tags
+  name = "${var.unique_name}-ecs-service"
+  tags = local.tags
 
   vpc_id = var.vpc_id
 
   ingress {
-    from_port   = local.service_port
-    to_port     = local.service_port
-    protocol    = "tcp"
+    from_port       = local.service_port
+    to_port         = local.service_port
+    protocol        = "tcp"
     security_groups = [aws_security_group.lb.id]
   }
 
@@ -63,9 +63,9 @@ resource "aws_security_group" "ecs_service" {
 }
 
 resource "aws_cloudwatch_log_group" "mlflow" {
-  name = "/aws/ecs/${var.unique_name}"
+  name              = "/aws/ecs/${var.unique_name}"
   retention_in_days = var.log_retention_in_days
-  tags = local.tags
+  tags              = local.tags
 }
 
 resource "aws_ecs_cluster" "mlflow" {
@@ -81,20 +81,25 @@ resource "aws_ecs_task_definition" "mlflow" {
       name      = "mlflow"
       image     = "larribas/mlflow:${var.container_image_tag}"
       essential = true
+
+      # As of version 1.9.1, MLFlow doesn't support specifying the backend store uri as an environment variable. ECS doesn't allow evaluating secret environment variables from within the command. Therefore, we are forced to override the entrypoint and assume the docker image has a shell we can use to interpolate the secret at runtime.
+      entryPoint = ["sh", "-c"]
       command = [
-        "--host=0.0.0.0",
-        "--port=${local.service_port}",
-        "--default-artifact-root=s3://${local.artifact_bucket_id}${var.artifact_bucket_path}",
-        "--backend-store-uri=mysql+pymysql://${aws_rds_cluster.backend_store.master_username}:${data.aws_secretsmanager_secret_version.db_password.secret_string}@${aws_rds_cluster.backend_store.endpoint}:${aws_rds_cluster.backend_store.port}/${aws_rds_cluster.backend_store.database_name}",
+        "/bin/sh -c \"mlflow server --host=0.0.0.0 --port=${local.service_port} --default-artifact-root=s3://${local.artifact_bucket_id}${var.artifact_bucket_path} --backend-store-uri=mysql+pymysql://${aws_rds_cluster.backend_store.master_username}:`echo -n $DB_PASSWORD`@${aws_rds_cluster.backend_store.endpoint}:${aws_rds_cluster.backend_store.port}/${aws_rds_cluster.backend_store.database_name}\""
       ]
       portMappings = [{ containerPort = local.service_port }]
-      secrets = []
+      secrets = [
+        {
+          name      = "DB_PASSWORD"
+          valueFrom = data.aws_secretsmanager_secret.db_password.arn
+        },
+      ]
       logConfiguration = {
-        logDriver = "awslogs"
+        logDriver     = "awslogs"
         secretOptions = null
         options = {
-          "awslogs-group" = aws_cloudwatch_log_group.mlflow.name
-          "awslogs-region" = data.aws_region.current.name
+          "awslogs-group"         = aws_cloudwatch_log_group.mlflow.name
+          "awslogs-region"        = data.aws_region.current.name
           "awslogs-stream-prefix" = "cis"
         }
       }
@@ -145,22 +150,22 @@ resource "aws_security_group" "lb" {
 }
 
 resource "aws_security_group_rule" "lb_ingress_http" {
-  description              = "Only allow load balancer to reach the ECS service on the right port"
-  type                     = "ingress"
-  from_port                = 80
-  to_port                  = 80
-  protocol                 = "tcp"
-  cidr_blocks              = var.load_balancer_ingress_cidr_blocks
+  description       = "Only allow load balancer to reach the ECS service on the right port"
+  type              = "ingress"
+  from_port         = 80
+  to_port           = 80
+  protocol          = "tcp"
+  cidr_blocks       = var.load_balancer_ingress_cidr_blocks
   security_group_id = aws_security_group.lb.id
 }
 
 resource "aws_security_group_rule" "lb_ingress_https" {
-  description              = "Only allow load balancer to reach the ECS service on the right port"
-  type                     = "ingress"
-  from_port                = 443
-  to_port                  = 443
-  protocol                 = "tcp"
-  cidr_blocks              = var.load_balancer_ingress_cidr_blocks
+  description       = "Only allow load balancer to reach the ECS service on the right port"
+  type              = "ingress"
+  from_port         = 443
+  to_port           = 443
+  protocol          = "tcp"
+  cidr_blocks       = var.load_balancer_ingress_cidr_blocks
   security_group_id = aws_security_group.lb.id
 }
 
@@ -171,7 +176,7 @@ resource "aws_security_group_rule" "lb_egress" {
   to_port                  = local.service_port
   protocol                 = "tcp"
   source_security_group_id = aws_security_group.ecs_service.id
-  security_group_id = aws_security_group.lb.id
+  security_group_id        = aws_security_group.lb.id
 }
 
 resource "aws_lb" "mlflow" {

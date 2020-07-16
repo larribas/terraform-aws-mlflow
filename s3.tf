@@ -1,14 +1,14 @@
 resource "aws_kms_key" "default_bucket" {
-  count = local.create_dedicated_bucket ? 1 : 0
+  count                   = local.create_dedicated_bucket ? 1 : 0
   description             = "This key is used to encrypt bucket objects"
   deletion_window_in_days = 10
-  tags = local.tags
+  tags                    = local.tags
 }
 
 resource "aws_s3_bucket" "default" {
-  count = local.create_dedicated_bucket ? 1 : 0
+  count         = local.create_dedicated_bucket ? 1 : 0
   bucket_prefix = var.unique_name
-  acl    = "private"
+  acl           = "private"
 
   versioning {
     enabled = true
@@ -41,9 +41,9 @@ resource "aws_s3_bucket" "default" {
 }
 
 resource "aws_iam_role_policy" "default_bucket" {
-  count = local.create_dedicated_bucket ? 1 : 0
+  count       = local.create_dedicated_bucket ? 1 : 0
   name_prefix = "access_to_default_bucket"
-  role = aws_iam_role.ecs_task.id
+  role        = aws_iam_role.ecs_task.id
 
   policy = jsonencode({
     Version = "2012-10-17"
