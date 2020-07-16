@@ -3,7 +3,8 @@ data "aws_availability_zones" "available" {
 }
 
 data "aws_secretsmanager_secret" "db_password" {
-  name = var.database_password_secret_name
+  # arn = var.database_password_secret_arn
+  name = "mlflow"
 }
 
 data "aws_secretsmanager_secret_version" "db_password" {
@@ -35,7 +36,7 @@ resource "aws_iam_role_policy" "db_secrets" {
 
 resource "aws_db_subnet_group" "rds" {
   name       = "${var.unique_name}-rds"
-  subnet_ids = var.db_subnet_ids
+  subnet_ids = var.database_subnet_ids
 }
 
 resource "aws_security_group" "rds" {

@@ -25,5 +25,3 @@ output "ecs_task_role_id" {
 output "artifact_bucket_id" {
   value = local.artifact_bucket_id
 }
-
-

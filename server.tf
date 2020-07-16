@@ -64,7 +64,7 @@ resource "aws_security_group" "ecs_service" {
 
 resource "aws_cloudwatch_log_group" "mlflow" {
   name              = "/aws/ecs/${var.unique_name}"
-  retention_in_days = var.log_retention_in_days
+  retention_in_days = var.container_log_retention_in_days
   tags              = local.tags
 }
 
@@ -110,8 +110,8 @@ resource "aws_ecs_task_definition" "mlflow" {
   task_role_arn            = aws_iam_role.ecs_task.arn
   execution_role_arn       = aws_iam_role.ecs_execution.arn
   requires_compatibilities = ["FARGATE"]
-  cpu                      = var.cpu
-  memory                   = var.memory
+  cpu                      = var.container_cpu
+  memory                   = var.container_memory
 }
 
 resource "aws_ecs_service" "mlflow" {
@@ -182,7 +182,7 @@ resource "aws_security_group_rule" "lb_egress" {
 resource "aws_lb" "mlflow" {
   name               = var.unique_name
   tags               = local.tags
-  internal           = var.internal_load_balancer ? true : false
+  internal           = var.load_balancer_is_internal ? true : false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.lb.id]
   subnets            = var.load_balancer_subnet_ids
