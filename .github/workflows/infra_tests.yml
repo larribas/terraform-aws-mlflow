@@ -1,0 +1,34 @@
+name: 'Infrastructure tests'
+
+on: [pull_request]
+
+jobs:
+  terratest:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout source
+      uses: actions/checkout@v1
+    - name: Setup Go 1.13.x
+      uses: actions/setup-go@v1
+      with:
+        go-version: '1.13.5'
+    - name: Install TF Lint
+      run: |
+        bash <(curl -s https://raw.githubusercontent.com/wata727/tflint/master/install_linux.sh)
+    - name: Lint module files
+      run: |
+        tflint *.tf
+    - name: Lint test files
+      run: |
+        tflint terratest/examples/*.tf
+    - name: Run tests
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_INFRA_TEST_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_INFRA_TEST_SECRET_ACCESS_KEY }}
+      run: |
+        cd terratest/test
+        for test in $(ls | egrep "_test.go$")
+        do
+          go test -v -timeout 60m $test
+        done
