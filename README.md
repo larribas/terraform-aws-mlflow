@@ -26,7 +26,7 @@ When designing this module, we've made some decisions about technologies and con
 
 ## Architecture
 
-The following diagram illustrates the architecture this module creates by default:
+The following diagram illustrates the components the module creates with the default configuration:
 
 ![Architecture Diagram](diagrams/architecture.png)
 
@@ -61,22 +61,10 @@ You can find a more complete usage example in the [`terratest/examples/`](terrat
 
 ## Roadmap
 
-- First production-ready version:
-  - [x] Example usage folder (gitignored)
-  - [x] ECS cluster and service (backed by local storage)
-  - [x] Output info to hook it to an LB listener
-  - [x] Default S3 bucket + IAM role + Documentation
-  - [x] RDS cluster + backend-store-uri + Documentation
-  - [x] Terraform fmt and grooming
-  - [x] LICENSE
-  - [x] README
-  - [ ] Full example with a custom domain, ALB and S3 buckets
-  - [ ] Terratest and GitHub Actions
 - Upcoming:
   - [ ] PR to mlflow to accept BACKEND_STORE_URI as an environment variable => Allow selecting a different container image
   - [ ] Target-based autoscaling
-  - [ ] Allow injecting sidecar containers and inject a datadog agent
-
+  - [ ] Allow injecting sidecar containers (we need to inject a datadog agent)
 
 
 ## Contributors
