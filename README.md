@@ -52,6 +52,12 @@ module "mlflow" {
 
 You can find a more complete usage example in the [`terratest/examples/`](terratest/examples/) folder.
 
+Note you may also:
+
+- Add sidecar containers (e.g. a [datadog agent for Fargate](https://www.datadoghq.com/blog/monitor-aws-fargate/))
+- Provide your own bucket/path as the default artifact root
+- 
+
 
 ## Caveats / Notes
 
@@ -64,7 +70,6 @@ You can find a more complete usage example in the [`terratest/examples/`](terrat
 - Upcoming:
   - [ ] PR to mlflow to accept BACKEND_STORE_URI as an environment variable => Allow selecting a different container image
   - [ ] Target-based autoscaling
-  - [ ] Allow injecting sidecar containers (we need to inject a datadog agent)
 
 
 ## Contributors

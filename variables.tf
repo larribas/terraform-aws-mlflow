@@ -47,7 +47,7 @@ variable "database_password_secret_arn" {
 
 variable "container_image_tag" {
   type        = string
-  default     = "1.9.1-beta"
+  default     = "1.9.1"
   description = "The MLFlow version to deploy. Note that this version has to be available as a tag here: https://hub.docker.com/r/larribas/mlflow"
 }
 
@@ -67,6 +67,11 @@ variable "container_log_retention_in_days" {
   type        = number
   default     = 90
   description = "The number of days to keep logs around"
+}
+
+variable "sidecar_container_definitions" {
+  default     = []
+  description = "A list of container definitions to deploy alongside the main container. See: https://www.terraform.io/docs/providers/aws/r/ecs_task_definition.html#container_definitions"
 }
 
 variable "artifact_bucket_id" {

@@ -76,7 +76,7 @@ resource "aws_ecs_cluster" "mlflow" {
 resource "aws_ecs_task_definition" "mlflow" {
   family = var.unique_name
   tags   = local.tags
-  container_definitions = jsonencode([
+  container_definitions = jsonencode(concat([
     {
       name      = "mlflow"
       image     = "larribas/mlflow:${var.container_image_tag}"
@@ -104,7 +104,7 @@ resource "aws_ecs_task_definition" "mlflow" {
         }
       }
     },
-  ])
+  ], var.sidecar_container_definitions))
 
   network_mode             = "awsvpc"
   task_role_arn            = aws_iam_role.ecs_task.arn
