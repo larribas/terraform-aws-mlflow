@@ -64,7 +64,7 @@ resource "aws_security_group" "ecs_service" {
 
 resource "aws_cloudwatch_log_group" "mlflow" {
   name              = "/aws/ecs/${var.unique_name}"
-  retention_in_days = var.container_log_retention_in_days
+  retention_in_days = var.service_log_retention_in_days
   tags              = local.tags
 }
 
@@ -79,7 +79,7 @@ resource "aws_ecs_task_definition" "mlflow" {
   container_definitions = jsonencode(concat([
     {
       name      = "mlflow"
-      image     = "larribas/mlflow:${var.container_image_tag}"
+      image     = "larribas/mlflow:${var.service_image_tag}"
       essential = true
 
       # As of version 1.9.1, MLFlow doesn't support specifying the backend store uri as an environment variable. ECS doesn't allow evaluating secret environment variables from within the command. Therefore, we are forced to override the entrypoint and assume the docker image has a shell we can use to interpolate the secret at runtime.
@@ -104,14 +104,14 @@ resource "aws_ecs_task_definition" "mlflow" {
         }
       }
     },
-  ], var.sidecar_container_definitions))
+  ], var.service_sidecar_container_definitions))
 
   network_mode             = "awsvpc"
   task_role_arn            = aws_iam_role.ecs_task.arn
   execution_role_arn       = aws_iam_role.ecs_execution.arn
   requires_compatibilities = ["FARGATE"]
-  cpu                      = var.container_cpu
-  memory                   = var.container_memory
+  cpu                      = var.service_cpu
+  memory                   = var.service_memory
 }
 
 resource "aws_ecs_service" "mlflow" {
@@ -124,7 +124,7 @@ resource "aws_ecs_service" "mlflow" {
 
 
   network_configuration {
-    subnets         = var.mlflow_subnet_ids
+    subnets         = var.service_subnet_ids
     security_groups = [aws_security_group.ecs_service.id]
   }
 
@@ -141,6 +141,14 @@ resource "aws_ecs_service" "mlflow" {
   depends_on = [
     aws_lb.mlflow,
   ]
+}
+
+resource "aws_appautoscaling_target" "mlflow" {
+  service_namespace  = "ecs"
+  resource_id        = "service/${aws_ecs_cluster.mlflow.name}/${aws_ecs_service.mlflow.name}"
+  scalable_dimension = "ecs:service:DesiredCount"
+  max_capacity       = var.service_max_capacity
+  min_capacity       = var.service_min_capacity
 }
 
 resource "aws_security_group" "lb" {

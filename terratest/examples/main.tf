@@ -51,7 +51,7 @@ module "mlflow" {
   }
   vpc_id                            = module.vpc.vpc_id
   database_subnet_ids               = module.vpc.database_subnets
-  mlflow_subnet_ids                 = module.vpc.private_subnets
+  service_subnet_ids                = module.vpc.private_subnets
   load_balancer_subnet_ids          = var.is_private ? module.vpc.private_subnets : module.vpc.public_subnets
   load_balancer_ingress_cidr_blocks = var.is_private ? [module.vpc.vpc_cidr_block] : ["0.0.0.0/0"]
   load_balancer_is_internal         = var.is_private
