@@ -3,8 +3,7 @@ data "aws_availability_zones" "available" {
 }
 
 data "aws_secretsmanager_secret" "db_password" {
-  # arn = var.database_password_secret_arn
-  name = "mlflow"
+  arn = var.database_password_secret_arn
 }
 
 data "aws_secretsmanager_secret_version" "db_password" {
