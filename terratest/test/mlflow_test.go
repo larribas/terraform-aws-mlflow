@@ -11,6 +11,8 @@ import (
 )
 
 func TestPublicDeployment(t *testing.T) {
+  t.Parallel()
+
 	terraformOptions := &terraform.Options{
 		TerraformDir: "../examples",
 		Vars: map[string]interface{}{
@@ -40,6 +42,8 @@ func TestPublicDeployment(t *testing.T) {
 }
 
 func TestPrivateDeploymentWithCustomBucket(t *testing.T) {
+  t.Parallel()
+
 	terraformOptions := &terraform.Options{
 		TerraformDir: "../examples",
 		Vars: map[string]interface{}{
