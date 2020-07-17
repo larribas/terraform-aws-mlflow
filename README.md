@@ -56,7 +56,7 @@ Note you may also:
 
 - Add sidecar containers (e.g. a [datadog agent for Fargate](https://www.datadoghq.com/blog/monitor-aws-fargate/))
 - Provide your own bucket/path as the default artifact root
-- 
+- Attach an autoscaling policy to the service (for instance, you may scale down to 0 instances during the night)
 
 
 ## Caveats / Notes

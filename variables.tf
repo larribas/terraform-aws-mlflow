@@ -64,6 +64,17 @@ variable "service_sidecar_container_definitions" {
   description = "A list of container definitions to deploy alongside the main container. See: https://www.terraform.io/docs/providers/aws/r/ecs_task_definition.html#container_definitions"
 }
 
+variable "service_min_capacity" {
+  type        = number
+  default     = 2
+  description = "Minimum number of instances for the ecs service. This will create an aws_appautoscaling_target that can later on be used to autoscale the MLFlow instance"
+}
+
+variable "service_max_capacity" {
+  type        = number
+  default     = 2
+  description = "Maximum number of instances for the ecs service. This will create an aws_appautoscaling_target that can later on be used to autoscale the MLFlow instance"
+}
 
 variable "database_subnet_ids" {
   type        = list(string)
@@ -73,6 +84,18 @@ variable "database_subnet_ids" {
 variable "database_password_secret_arn" {
   type        = string
   description = "The ARN of the SecretManager secret that defines the database password. It needs to be created before calling the module"
+}
+
+variable "database_min_capacity" {
+  type        = number
+  default     = 1
+  description = "The minimum capacity for the Aurora Serverless cluster. Aurora will scale automatically in this range. See: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless.how-it-works.html"
+}
+
+variable "database_max_capacity" {
+  type        = number
+  default     = 1
+  description = "The maximum capacity for the Aurora Serverless cluster. Aurora will scale automatically in this range. See: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless.how-it-works.html"
 }
 
 variable "artifact_bucket_id" {
