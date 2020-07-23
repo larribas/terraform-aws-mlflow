@@ -44,7 +44,7 @@ resource "aws_iam_role_policy" "default_bucket" {
       {
         Effect = "Allow"
         Action = [
-          "s3:ListBucket", 
+          "s3:ListBucket",
           "s3:HeadBucket",
         ]
         Resource = concat(
