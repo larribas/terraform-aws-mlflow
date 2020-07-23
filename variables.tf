@@ -109,3 +109,15 @@ variable "artifact_bucket_path" {
   default     = "/"
   description = "The path within the bucket where MLflow will store its artifacts"
 }
+
+variable "artifact_bucket_encryption_algorithm" {
+  description = "Algorithm used for encrypting the default bucket."
+  type        = string
+  default     = "AES256"
+}
+
+variable "artifact_bucket_encryption_key_arn" {
+  description = "ARN of the key used to encrypt the bucket. Only needed if you set aws:kms as encryption algorithm."
+  type        = string
+  default     = null
+}

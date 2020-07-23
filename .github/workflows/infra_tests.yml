@@ -2,10 +2,15 @@ name: 'Infrastructure tests'
 
 on:
   pull_request:
+    branches:
+      - master
     types: 
     - opened
     - synchronize
     - labeled
+  push:
+    branches:
+      - master
 
 jobs:
   tflint:

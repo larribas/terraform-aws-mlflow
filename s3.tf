@@ -1,10 +1,3 @@
-resource "aws_kms_key" "default_bucket" {
-  count                   = local.create_dedicated_bucket ? 1 : 0
-  description             = "This key is used to encrypt bucket objects"
-  deletion_window_in_days = 10
-  tags                    = local.tags
-}
-
 resource "aws_s3_bucket" "default" {
   count         = local.create_dedicated_bucket ? 1 : 0
   bucket_prefix = var.unique_name
@@ -26,8 +19,8 @@ resource "aws_s3_bucket" "default" {
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
-        kms_master_key_id = aws_kms_key.default_bucket.0.arn
-        sse_algorithm     = "aws:kms"
+        kms_master_key_id = var.artifact_bucket_encryption_key_arn
+        sse_algorithm     = var.artifact_bucket_encryption_algorithm
       }
     }
   }
