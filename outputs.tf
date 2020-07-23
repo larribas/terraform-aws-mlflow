@@ -14,6 +14,10 @@ output "load_balancer_dns_name" {
   value = aws_lb.mlflow.dns_name
 }
 
+output "cluster_id" {
+  value = aws_ecs_cluster.mlflow.id
+}
+
 output "service_execution_role_id" {
   value = aws_iam_role.ecs_execution.id
 }
