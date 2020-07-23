@@ -42,9 +42,9 @@ resource "aws_iam_role_policy" "default_bucket" {
     Version = "2012-10-17"
     Statement = [
       {
-        Effect   = "Allow"
-        Action   = "s3:ListBucket"
-        Action   = "s3:HeadBucket"
+        Effect = "Allow"
+        Action = "s3:ListBucket"
+        Action = "s3:HeadBucket"
         Resource = concat(
           [
             aws_s3_bucket.default.*.arn,
@@ -77,7 +77,7 @@ resource "aws_iam_role_policy" "default_bucket" {
             "${aws_s3_bucket.default.*.arn}/*",
           ],
           [
-            for bucket in var.artifact_buckets_mlflow_will_read:
+            for bucket in var.artifact_buckets_mlflow_will_read :
             "${bucket}/*"
           ],
         )
