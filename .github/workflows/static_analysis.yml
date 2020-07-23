@@ -1,0 +1,31 @@
+name: 'Static analysis'
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+
+jobs:
+  tflint:
+    name: Terraform Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: master
+      - name: TFLint
+        uses: docker://wata727/tflint
+
+  fmt:
+    name: Code Format
+    runs-on: ubuntu-latest
+    container:
+      image: hashicorp/terraform:latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: master
+      - run: terraform fmt --recursive --diff -check=true

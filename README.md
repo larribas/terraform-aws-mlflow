@@ -1,5 +1,6 @@
 # terraform-aws-mlflow
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](./LICENSE)
+![GitHub Actions](https://github.com/Glovo/terraform-aws-mlflow/workflows/Static%20analysis/badge.svg)
 ![GitHub Actions](https://github.com/Glovo/terraform-aws-mlflow/workflows/Infrastructure%20tests/badge.svg)
 
 A terraform module to productionalize [MLflow](https://mlflow.org) on top of AWS.

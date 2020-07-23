@@ -8,35 +8,16 @@ on:
     - opened
     - synchronize
     - labeled
-  push:
-    branches:
-      - master
 
 jobs:
-  tflint:
-    name: Terraform Lint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@master
-      - name: TFLint
-        uses: docker://wata727/tflint
-
-  fmt:
-    name: Code Format
-    runs-on: ubuntu-latest
-    container:
-      image: hashicorp/terraform:latest
-    steps:
-      - uses: actions/checkout@master
-      - run: terraform fmt --recursive --diff -check=true
-
   terratest:
     if: github.event.label.name == 'terratest'
     name: Terratest
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout source
-      uses: actions/checkout@master
+    - uses: actions/checkout@v2
+      with:
+        ref: master
     - name: Setup Go 1.13.x
       uses: actions/setup-go@v1
       with:
