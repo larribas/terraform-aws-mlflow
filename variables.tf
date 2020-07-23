@@ -110,6 +110,12 @@ variable "artifact_bucket_path" {
   description = "The path within the bucket where MLflow will store its artifacts"
 }
 
+variable "artifact_buckets_mlflow_will_read" {
+  description = "A list of bucket IDs MLflow will need read access to, in order to show the stored artifacts. It accepts any valid IAM resource, including ARNs with wildcards, so you can do something like arn:aws:s3:::bucket-prefix-*"
+  type        = list(string)
+  default     = []
+}
+
 variable "artifact_bucket_encryption_algorithm" {
   description = "Algorithm used for encrypting the default bucket."
   type        = string
