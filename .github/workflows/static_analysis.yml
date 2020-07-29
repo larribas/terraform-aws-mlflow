@@ -14,8 +14,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          ref: master
       - name: TFLint
         uses: docker://wata727/tflint
 
@@ -26,6 +24,4 @@ jobs:
       image: hashicorp/terraform:latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          ref: master
       - run: terraform fmt --recursive --diff -check=true
