@@ -98,6 +98,11 @@ variable "database_max_capacity" {
   description = "The maximum capacity for the Aurora Serverless cluster. Aurora will scale automatically in this range. See: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless.how-it-works.html"
 }
 
+variable "database_skip_final_snapshot" {
+  type = bool
+  default = false
+}
+
 variable "artifact_bucket_id" {
   type        = string
   default     = null

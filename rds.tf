@@ -70,7 +70,7 @@ resource "aws_rds_cluster" "backend_store" {
   availability_zones        = data.aws_availability_zones.available.names
   master_username           = "ecs_task"
   database_name             = "mlflow"
-  skip_final_snapshot       = true
+  skip_final_snapshot       = var.database_skip_final_snapshot
   final_snapshot_identifier = var.unique_name
   master_password           = data.aws_secretsmanager_secret_version.db_password.secret_string
   backup_retention_period   = 14

@@ -56,7 +56,8 @@ module "mlflow" {
   load_balancer_ingress_cidr_blocks = var.is_private ? [module.vpc.vpc_cidr_block] : ["0.0.0.0/0"]
   load_balancer_is_internal         = var.is_private
   artifact_bucket_id                = var.artifact_bucket_id
-  database_password_secret_arn      = aws_secretsmanager_secret.db_password.arn
+  database_password_secret_arn      = aws_secretsmanager_secret_version.db_password.secret_id
+  database_skip_final_snapshot      = true
 }
 
 resource "aws_lb_listener" "http" {
