@@ -99,7 +99,7 @@ variable "database_max_capacity" {
 }
 
 variable "database_skip_final_snapshot" {
-  type = bool
+  type    = bool
   default = false
 }
 
